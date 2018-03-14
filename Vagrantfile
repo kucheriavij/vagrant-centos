@@ -40,8 +40,6 @@ Vagrant.configure('2') do |config|
   config.vm.box_check_update = options['box_check_update']
   
   config.vm.provider 'virtualbox' do |vb|
-    # Display the VirtualBox GUI when booting the machine
-    vb.gui = options['gui']
 	# machine cpus count
 	vb.cpus = options['cpus']
     # machine memory size
@@ -60,7 +58,7 @@ Vagrant.configure('2') do |config|
   config.vm.network 'private_network', ip: options['ip']
 
   # sync: folder 'ap-office' (host machine) -> folder '/app' (guest machine)
-  config.vm.synced_folder './domains', '/app', owner: 'vagrant', group: 'vagrant'
+  config.vm.synced_folder './', '/app', owner: 'vagrant', group: 'vagrant', mount_options: ['dmode=755','fmode=644'], type: 'nfs', linux__nfs_options: ['rw','no_subtree_check','all_squash','async']
   
   # disable folder '/vagrant' (guest machine)
   config.vm.synced_folder '.', '/vagrant', disabled: true

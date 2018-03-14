@@ -1,4 +1,6 @@
 .idea/
+.vagrant/
 domains/
+ap-office.test/
 vagrant/config/vagrant-local.yml
 vagrant/nginx/log/
