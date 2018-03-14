@@ -1,0 +1,4 @@
+.idea/
+domains/
+vagrant/config/vagrant-local.yml
+vagrant/nginx/log/
