@@ -53,8 +53,11 @@ info "Configure MySQL"
 systemctl stop mysqld
 systemctl set-environment MYSQLD_OPTS="--skip-grant-tables"
 systemctl start mysqld
-mysql -uroot <<< "UPDATE mysql.user SET authentication_string = PASSWORD(\"''\") WHERE User = 'root' AND Host = 'localhost'"
-mysql -uroot <<< "FLUSH PRIVILEGES"
+#mysql -uroot <<< "UPDATE mysql.user SET authentication_string = PASSWORD(\"''\") WHERE User = 'root' AND Host = 'localhost'"
+#mysql -uroot <<< "FLUSH PRIVILEGES"
+mysql -uroot <<-EOSQL
+UPDATE mysql.user SET authentication_string = PASSWORD('') WHERE User = 'root' AND Host = 'localhost'; FLUSH PRIVILEGES;
+EOSQL
 systemctl stop mysqld
 systemctl unset-environment MYSQLD_OPTS
 systemctl start mysqld
@@ -82,6 +85,7 @@ echo "Done!"
 info "Configure NGINX"
 #sed -i 's/user nginx/user vagrant/g' /etc/nginx/nginx.conf
 mv /etc/nginx/nginx.conf{,.default} && cp /app/vagrant/nginx/nginx.conf /etc/nginx/nginx.conf
+if [ -d /app/vagrant/nginx/log ]; then echo 'Exists'; else mkdir /app/vagrant/nginx/log; fi
 echo "Done!"
 
 info "Enabling site configuration"
