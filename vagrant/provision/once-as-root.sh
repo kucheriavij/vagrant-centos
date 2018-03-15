@@ -56,7 +56,7 @@ systemctl start mysqld
 #mysql -uroot <<< "UPDATE mysql.user SET authentication_string = PASSWORD(\"''\") WHERE User = 'root' AND Host = 'localhost'"
 #mysql -uroot <<< "FLUSH PRIVILEGES"
 mysql -uroot <<-EOSQL
-UPDATE mysql.user SET authentication_string = PASSWORD('') WHERE User = 'root' AND Host = 'localhost'; FLUSH PRIVILEGES;
+UPDATE mysql.user SET authentication_string = PASSWORD(''), password_expired = 'N' WHERE User = 'root' AND Host = 'localhost'; FLUSH PRIVILEGES;
 EOSQL
 systemctl stop mysqld
 systemctl unset-environment MYSQLD_OPTS
@@ -92,10 +92,11 @@ info "Enabling site configuration"
 ln -sf /app/vagrant/nginx/app.conf /etc/nginx/conf.d/app.conf
 echo "Done!"
 
-#info "Initailize databases for MySQL"
-#mysql -uroot <<< "CREATE DATABASE yii2advanced"
-#mysql -uroot <<< "CREATE DATABASE yii2advanced_test"
-#echo "Done!"
+info "Initailize databases for MySQL"
+mysql -uroot <<-EOSQL
+CREATE DATABASE apoffice DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+EOSQL
+echo "Done!"
 
 info "Disable SELinux"
 setenforce 0
